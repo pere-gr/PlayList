@@ -17,16 +17,23 @@ struct PlayFolder {
 
 class PlayList {
 public:
+  struct PlayFolder browse(int id);
+  int currentFolder();
+  int currentTrack();
+  String next();
+  struct PlayEntry nextIs();
+  String path(int id);
+  String previous();
+  struct PlayEntry previousIs();
   void scan(String path);
   String select(int id);
-  String path(int id);
-  void currentSet(int id);
-  int nextId();
-  int previousId();
-  struct PlayFolder browse(int id);
-  std::vector<struct PlayEntry> list;
+
 private:
   void scan(int parent, String path);
-  int currentFolder = -1;
-  int currentFile = -1;
+  int nextId();
+  int previousId();
+
+  int currFolder = -1;
+  int currTrack = -1;
+  std::vector<struct PlayEntry> list;
 };

@@ -13,11 +13,7 @@ void setup() {
   pl.scan("/");
   Serial.print(F("Free RAM = "));
   Serial.println(freeMemory(), DEC);
-  Serial.printf("Names %d\n", pl.list.size());
-  for (int i = 0; i < (int)pl.list.size(); i++) {
-    Serial.printf("%d %d [%d]- %s\n", pl.list[i].parent, i, (int)pl.list[i].isDir, pl.list[i].name.c_str());
-  }
-  //delay(5000);
+
 }
 
 void loop() {
@@ -25,8 +21,7 @@ void loop() {
   //int fileNo = random(pl.list.size());
   //Serial.printf("path %d [%d] = %s\n",fileNo,pl.list[fileNo].id,  pl.path(fileNo).c_str());
 
-  int nextTrack = pl.nextId();
-  Serial.printf("next [%d] = %s \n", nextTrack, pl.select(nextTrack).c_str());
+  Serial.printf("next = %s \n", pl.next().c_str());
 
 
   //Serial.println("\n----------------------------\n");
@@ -35,7 +30,7 @@ void loop() {
   //Serial.printf("Random 1 %s\n",pl.files[pl.rand()].c_str());
   //Serial.printf("Random 2 %s\n",pl.files[pl.rand()].c_str());
   //Serial.printf("Random 3 %s\n",pl.files[pl.rand()].c_str());
-  struct PlayFolder folder = pl.browse(2);
+  struct PlayFolder folder = pl.browse(61);
 
   Serial.printf("folder [%d] = %s \n", folder.id , folder.name.c_str());
   for(int i = 0 ; i < (int)folder.entries.size(); i++){

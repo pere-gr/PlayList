@@ -16,18 +16,49 @@ struct PlayFolder PlayList::browse(int id) {
   return folder;
 }
 
+int PlayList::currentFolder(){
+  return currFolder;
+}
+
+int PlayList::currentTrack(){
+  return currTrack;
+}
+
+String PlayList::next(){
+  int nId = nextId();
+  currFolder = list[nId].parent;
+  currTrack  = nId;
+  return this->path(nId); 
+}
+
+struct PlayEntry PlayList::nextIs(){
+  return list[nextId()];
+}
+
+String PlayList::previous(){
+  int pId = previousId();
+  currFolder = list[pId].parent;
+  currTrack = pId;
+  return this->path(pId); 
+}
+
+struct PlayEntry PlayList::previousIs(){
+  return list[previousId()];
+}
+
+void PlayList::scan(String path) {
+  scan(-1, path);
+}
+
 String PlayList::select(int id) {
-  currentFolder = list[id].parent;
-  currentFile = id;
-  return this->path(id);
+  currFolder = list[id].parent;
+  currTrack = list[id].id;
+  return this->path(currTrack); 
 }
 
-void PlayList::currentSet(int id) {
-  currentFile = id;
-}
-
+// ----------------------------- PRIVATE -----------------
 int PlayList::nextId() {
-  int trackNo = (currentFile + 1) >= (int)list.size() ? 0 : currentFile + 1;
+  int trackNo = (currTrack + 1) >= (int)list.size() ? 0 : currTrack + 1;
   struct PlayEntry entry;
 
   for (trackNo; trackNo < (int)list.size() ; trackNo++){
@@ -41,7 +72,7 @@ int PlayList::nextId() {
 }
 
 int PlayList::previousId() {
-  int trackNo = (currentFile - 1) >= 0 ? 0 : (int)list.size() - 1;
+  int trackNo = (currTrack - 1) >= 0 ? 0 : (int)list.size() - 1;
   struct PlayEntry entry;
 
   for (trackNo; trackNo < (int)list.size() ; trackNo--){
@@ -57,11 +88,7 @@ int PlayList::previousId() {
 String PlayList::path(int id) {
   struct PlayEntry entry = list[id];
   String entryPath = entry.parent > 0 ? path(entry.parent) + "/" + entry.name : entry.name;
-  return entryPath; //entry.isDir && entry.parent >= 0 ? entryPath + "/" : entryPath;
-}
-
-void PlayList::scan(String path) {
-  scan(-1, path);
+  return entryPath;
 }
 
 void PlayList::scan(int parent, String path) {
@@ -120,6 +147,4 @@ void PlayList::scan(int parent, String path) {
       list.push_back(newFile);
     }
   }
-
-  // ----------------------------- PRIVATE -----------------
 }
